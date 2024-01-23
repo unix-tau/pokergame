@@ -19,6 +19,7 @@ public final class Card implements Comparable<Card> {
     public String toString() {
         return value.toString() + suit.toString();
     }
+
     public CardSuit getSuit() {
         return suit;
     }

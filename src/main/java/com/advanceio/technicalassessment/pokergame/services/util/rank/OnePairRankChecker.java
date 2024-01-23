@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class OnePairRankChecker implements RankChecker {
     @Override
-    public   String evaluateHand(List<Card> hand, PokerVariant pokerVariant) {
+    public String evaluateHand(List<Card> hand, PokerVariant pokerVariant) {
         if (hand == null || hand.size() != pokerVariant.getHandSize()) {
             return HandRank.UNKNOWN_HAND.toString();
         }

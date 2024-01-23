@@ -26,7 +26,7 @@ public class GameController {
     }
 
     public String evaluateHand(PokerVariant pokerVariant, RankChecker rankChecker) {
-        String handValue = pokerGame.evaluateHand(pokerVariant,rankChecker);
+        String handValue = pokerGame.evaluateHand(pokerVariant, rankChecker);
         return handValue;
     }
 
@@ -35,9 +35,21 @@ public class GameController {
     }
 
 
-    public List<Card>  getPlayerHand() {
+    public List<Card> getPlayerHand() {
         List<Card> cards = pokerGame.getPlayerHand();
-        return  cards;
+        return cards;
+    }
+
+    public List<Card> getDeck() {
+        return pokerGame.getDeck();
+    }
+
+    public List<Card> getOriginalDeck() {
+        return pokerGame.getOriginalDeck();
+    }
+
+    public void setOriginalDeck(List<Card> originalDeck) {
+        pokerGame.setOriginalDeck(originalDeck);
     }
 }
 

@@ -7,10 +7,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 class PokergameApplicationTests {
 
 
-
     @Test
     void generateThreeOfAKindHand() {
         // Example usage with ThreeOfAKindRankChecker
-         }
+    }
 
 }
