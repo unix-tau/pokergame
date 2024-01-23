@@ -1,0 +1,161 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class PokerGame {
+    private List<Card> deck;
+    private List<Card> playerHand;
+
+    public PokerGame() {
+        deck = initializeDeck();
+        playerHand = new ArrayList<>();
+    }
+
+    private List<Card> initializeDeck() {
+        List<Card> newDeck = new ArrayList<>();
+        String[] ranks = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"};
+        String[] suits = {"Hearts", "Diamonds", "Clubs", "Spades"};
+
+        for (String rank : ranks) {
+            for (String suit : suits) {
+                newDeck.add(new Card(rank, suit));
+            }
+        }
+
+        return newDeck;
+    }
+
+    public void shuffleDeck() {
+        Collections.shuffle(deck);
+    }
+
+    public void dealHand() {
+        playerHand = deck.subList(0, 4); // Deal 4 cards instead of 5
+        deck = deck.subList(4, deck.size());
+    }
+
+    public String evaluateHand() {
+        // Adjust your hand evaluation logic for a hand of 4 cards
+
+        // Example logic:
+        long uniqueRanks = playerHand.stream().map(Card::getRank).distinct().count();
+
+        if (uniqueRanks == 4) {
+            return "Four different cards";
+        } else {
+            return "Unknown Hand";
+        }
+    }
+
+    public List<Card> getPlayerHand() {
+        return playerHand;
+    }
+
+    public static void main(String[] args) {
+        PokerGame pokerGame = new PokerGame();
+
+        System.out.println("\n\nWelcome to the Four-Card Draw Poker Game!");
+        pokerGame.shuffleDeck();
+        pokerGame.dealHand();
+
+        System.out.println("\nPlayer's Hand:");
+        for (Card card : pokerGame.getPlayerHand()) {
+            System.out.println(card.getRank() + " of " + card.getSuit());
+        }
+
+        String handRank = pokerGame.evaluateHand();
+        System.out.println("\nHand Rank: " + handRank);
+    }
+}
+
+class Card {
+    private String rank;
+    private String suit;
+
+    public Card(String rank, String suit) {
+        this.rank = rank;
+        this.suit = suit;
+    }
+
+    public String getRank() {
+        return rank;
+    }
+
+    public String getSuit() {
+        return suit;
+    }
+}
+
+
+
+
+	public String evaluateHand(List<Card> cards ){
+	List<CardRank> handRanks = new ArrayList<>();
+
+	 for (Card card : cards) {
+		handRanks.add(card.getValue());
+	}
+
+long uniqueRanks = handRanks.stream().distinct().count();
+
+        if (uniqueRanks == 5) {
+		if (isStraight() && isFlush()) {
+		return "Straight Flush";
+		} else if (isStraight()) {
+		return "Straight";
+		} else if (isFlush()) {
+		return "Flush";
+		} else {
+		return "High Cards";
+		}
+		} else if (uniqueRanks == 4) {
+		return "One Pair";
+		} else if (uniqueRanks == 3) {
+		if (isThreeOfAKind(handRanks)) {
+		return "Three of a Kind";
+		} else {
+		return "Two Pair";
+		}
+		} else if (uniqueRanks == 2) {
+		if (isFourOfAKind(handRanks)) {
+		return "Four of a Kind";
+		} else {
+		return "Full House";
+		}
+		}
+
+		return "Unknown Hand";
+		}
+
+
+
+import java.util.Arrays;
+import java.util.List;
+
+public class PokerHandRankProvider implements HandRankProvider {
+    @Override
+    public List<String> getHandRanks() {
+        return Arrays.asList(
+                HandRank.STRAIGHT_FLUSH.name(),
+                HandRank.FOUR_OF_A_KIND.name(),
+                HandRank.FULL_HOUSE.name(),
+                HandRank.FLUSH.name(),
+                HandRank.STRAIGHT.name(),
+                HandRank.THREE_OF_A_KIND.name(),
+                HandRank.TWO_PAIR.name(),
+                HandRank.ONE_PAIR.name(),
+                HandRank.HIGH_CARDS.name()
+        );
+    }
+
+    public static void main(String[] args) {
+        PokerHandRankProvider pokerHandRankProvider = new PokerHandRankProvider();
+        List<String> handRanks = pokerHandRankProvider.getHandRanks();
+
+        System.out.println("Poker Hand Ranks:");
+        for (String handRank : handRanks) {
+            System.out.println(handRank);
+        }
+    }
+}
+
