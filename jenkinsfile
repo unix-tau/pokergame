@@ -1,0 +1,21 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                // Checkout the source code from your repository
+                // You may need to configure your SCM according to your project
+                // For example, if you're using Git:
+                // git 'https://github.com/your/repository.git'
+                
+                // Run Maven build with SonarQube analysis
+                sh 'mvn sonar:sonar \
+                    -Dsonar.projectKey=pokergame \
+                    -Dsonar.host.url=http://localhost:9000 \
+                    -Dsonar.login=965ab45b68c630f977890e23f0c3fa0ab1580dca'
+            }
+        }
+    }
+}
+
