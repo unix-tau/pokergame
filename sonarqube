@@ -1,0 +1,4 @@
+mvn sonar:sonar \
+  -Dsonar.projectKey=pokergame \
+  -Dsonar.host.url=http://localhost:9000 \
+  -Dsonar.login=965ab45b68c630f977890e23f0c3fa0ab1580dca

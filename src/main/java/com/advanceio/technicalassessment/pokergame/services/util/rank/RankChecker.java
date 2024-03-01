@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface RankChecker {
 
-    public String evaluateHand(List<Card> hand, PokerVariant pokerVariant);
+     String evaluateHand(List<Card> hand, PokerVariant pokerVariant);
 }

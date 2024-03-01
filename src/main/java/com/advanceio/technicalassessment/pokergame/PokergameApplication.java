@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
-@SpringBootApplication
+//@SpringBootApplication
 public class PokergameApplication {
 
 
@@ -21,7 +21,7 @@ public class PokergameApplication {
 
     //tests
     public static void main(String[] args) {
-        SpringApplication.run(PokergameApplication.class);
+        //SpringApplication.run(PokergameApplication.class);
         //in future  to available over the web
         Scanner scanner = new Scanner(System.in);
 
@@ -65,6 +65,8 @@ public class PokergameApplication {
                 System.out.println("please  enter values 0 to 8");
                 testCaseIndex = getTestCaseIndex(scanner);
             }
+
+            //RankChecker used from here for evaluating hand Strength
             handEvaluator(gameController, pokerVariant, testCases[testCaseIndex]);
 
 

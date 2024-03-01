@@ -65,6 +65,8 @@ public class PokerGameService {
         return playerHand;
     }
 
+
+
     public String evaluateHand(PokerVariant pokerVariant, RankChecker rankChecker) {
         List<Card> playerhand = getPlayerHand();
         String handRank = rankChecker.evaluateHand(playerhand, pokerVariant);
