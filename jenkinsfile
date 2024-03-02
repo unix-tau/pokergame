@@ -1,9 +1,9 @@
 pipeline {
-    agent any
-    
-    tools {
-        maven 'Maven'
-        jdk 'JDK'
+    agent {
+        docker {
+            image 'maven'
+            args '-u root:root' // Optional: set user to root
+        }
     }
     
     stages {
