@@ -1,14 +1,20 @@
 pipeline {
     agent any
-    
-    tools {
-        // Define the Maven tool
-        maven 'Maven'
-        // Define the JDK tool
-        jdk 'JDK'
+  tools {
+        maven 'Maven 3.3.9'
+        jdk 'jdk8'
     }
     
     stages {
+
+        stage ('Initialize') {
+            steps {
+                sh '''
+                    echo "PATH = ${PATH}"
+                    echo "M2_HOME = ${M2_HOME}"
+                '''
+            }
+        
         stage('Build') {
             steps {
                 // Checkout the source code from your repository
