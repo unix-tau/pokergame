@@ -1,6 +1,11 @@
 pipeline {
     agent any
     
+    tools {
+        maven 'Maven'
+        jdk 'JDK'
+    }
+    
     stages {
         stage('Initialize') {
             steps {
@@ -12,12 +17,12 @@ pipeline {
         }
         
         stage('Build') {
+            environment {
+                MAVEN_HOME = '/usr/share/maven'
+            }
             steps {
-                // Use Docker to run Maven build with SonarQube analysis
                 script {
-                    def mavenImage = docker.image('maven:3.3.9-jdk-8')
-                    mavenImage.pull()
-                    mavenImage.inside {
+                    docker.image('maven:3.3.9-jdk-8').inside {
                         sh 'mvn sonar:sonar \
                             -Dsonar.projectKey=pokergame \
                             -Dsonar.host.url=http://localhost:9000 \
