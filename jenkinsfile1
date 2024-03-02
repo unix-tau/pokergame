@@ -19,3 +19,7 @@ pipeline {
         }
     }
 }
+
+
+ docker exec -u 0 -it b02acaf9fae7 /bin/bash
+
