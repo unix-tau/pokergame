@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven'
-            args '-u root:root' // Optional: set user to root
-        }
-    }
+    agent any
     
     stages {
         stage('Initialize') {
@@ -18,17 +13,16 @@ pipeline {
         
         stage('Build') {
             steps {
-                // Checkout the source code from your repository
-                // You may need to configure your SCM according to your project
-                // For example, if you're using Git:
-                // git 'https://github.com/your/repository.git'
-                
-                // Run Maven build with SonarQube analysis
-                withSonarQubeEnv('sona-demo') {
-                    sh 'mvn sonar:sonar \
-                        -Dsonar.projectKey=pokergame \
-                        -Dsonar.host.url=http://localhost:9000 \
-                        -Dsonar.login=965ab45b68c630f977890e23f0c3fa0ab1580dca'
+                // Use Docker to run Maven build with SonarQube analysis
+                script {
+                    def mavenImage = docker.image('maven:3.3.9-jdk-8')
+                    mavenImage.pull()
+                    mavenImage.inside {
+                        sh 'mvn sonar:sonar \
+                            -Dsonar.projectKey=pokergame \
+                            -Dsonar.host.url=http://localhost:9000 \
+                            -Dsonar.login=965ab45b68c630f977890e23f0c3fa0ab1580dca'
+                    }
                 }
             }
         }
