@@ -11,21 +11,31 @@ import java.util.stream.Collectors;
 public class StraightRankChecker implements RankChecker {
     @Override
     public String evaluateHand(List<Card> hand, PokerVariant pokerVariant) {
-        // Implement logic for checking Straight
         if (hand.size() != pokerVariant.getHandSize()) {
             return HandRank.UNKNOWN_HAND.toString();
         }
 
-        // Extract distinct ranks and sort them
         List<CardRank> sortedRanks = hand.stream()
                 .map(Card::getValue)
                 .distinct()
                 .sorted()
                 .collect(Collectors.toList());
 
-        // Check if the ranks form a consecutive sequence
-        if (sortedRanks.size() == 5
-                && (sortedRanks.get(4).ordinal() - sortedRanks.get(0).ordinal() == 4)) {
+        if (sortedRanks.size() != pokerVariant.getHandSize()) {
+            return HandRank.UNKNOWN_HAND.toString();
+        }
+
+        boolean isStandardStraight = sortedRanks.get(sortedRanks.size() - 1).ordinal()
+                - sortedRanks.get(0).ordinal() == pokerVariant.getHandSize() - 1;
+
+        boolean isWheelStraight = sortedRanks.size() == 5
+                && sortedRanks.get(0) == CardRank.TWO
+                && sortedRanks.get(1) == CardRank.THREE
+                && sortedRanks.get(2) == CardRank.FOUR
+                && sortedRanks.get(3) == CardRank.FIVE
+                && sortedRanks.get(4) == CardRank.ACE;
+
+        if (isStandardStraight || isWheelStraight) {
             return HandRank.STRAIGHT.name();
         }
 

@@ -1,6 +1,7 @@
 package com.advanceio.technicalassessment.pokergame.services.util.rank;
 
 import com.advanceio.technicalassessment.pokergame.entity.Card;
+import com.advanceio.technicalassessment.pokergame.entity.CardRank;
 import com.advanceio.technicalassessment.pokergame.services.util.gamerules.HandRank;
 import com.advanceio.technicalassessment.pokergame.services.util.gamerules.PokerVariant;
 
@@ -14,15 +15,12 @@ public class StraightFlushRankChecker implements RankChecker {
             return HandRank.UNKNOWN_HAND.toString();
         }
 
-        // Sort the hand by rank
         List<Card> sortedHand = hand.stream()
                 .sorted((c1, c2) -> Integer.compare(c1.getValue().getValue(), c2.getValue().getValue()))
                 .collect(Collectors.toList());
 
-        // Check if all cards have the same suit
         boolean sameSuit = sortedHand.stream().map(Card::getSuit).distinct().count() == 1;
 
-        // Check if the ranks form a sequence
         boolean isStraight = true;
         for (int i = 0; i < sortedHand.size() - 1; i++) {
             if (sortedHand.get(i + 1).getValue().getValue() - sortedHand.get(i).getValue().getValue() != 1) {
@@ -31,10 +29,17 @@ public class StraightFlushRankChecker implements RankChecker {
             }
         }
 
-        if (sameSuit && isStraight) {
+        boolean isWheelStraightFlush = sortedHand.size() == 5
+                && sortedHand.get(0).getValue() == CardRank.TWO
+                && sortedHand.get(1).getValue() == CardRank.THREE
+                && sortedHand.get(2).getValue() == CardRank.FOUR
+                && sortedHand.get(3).getValue() == CardRank.FIVE
+                && sortedHand.get(4).getValue() == CardRank.ACE;
+
+        if (sameSuit && (isStraight || isWheelStraightFlush)) {
             return HandRank.STRAIGHT_FLUSH.toString();
-        } else {
-            return HandRank.UNKNOWN_HAND.toString();
         }
+
+        return HandRank.UNKNOWN_HAND.toString();
     }
 }
