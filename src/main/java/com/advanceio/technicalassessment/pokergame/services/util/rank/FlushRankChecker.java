@@ -10,7 +10,11 @@ import java.util.List;
 public class FlushRankChecker implements RankChecker {
     @Override
     public String evaluateHand(List<Card> hand, PokerVariant pokerVariant) {
-        if (hand.size() != pokerVariant.getHandSize()) {
+        if (hand == null || pokerVariant == null || hand.size() != pokerVariant.getHandSize()) {
+            return HandRank.UNKNOWN_HAND.toString();
+        }
+
+        if (hand.stream().anyMatch(card -> card == null || card.getSuit() == null)) {
             return HandRank.UNKNOWN_HAND.toString();
         }
 

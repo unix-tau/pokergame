@@ -32,6 +32,13 @@ class RankCheckerRegressionTests {
     }
 
     @Test
+    void straightCheckerReturnsUnknownWhenHandIsNull() {
+        String result = new StraightRankChecker().evaluateHand(null, variant);
+
+        assertEquals(HandRank.UNKNOWN_HAND.name(), result);
+    }
+
+    @Test
     void straightFlushCheckerTreatsAceLowSequenceAsStraightFlush() {
         List<Card> hand = List.of(
                 new Card(CardSuit.HEARTS, CardRank.ACE),
@@ -47,6 +54,21 @@ class RankCheckerRegressionTests {
     }
 
     @Test
+    void straightFlushCheckerReturnsUnknownForBrokenStraightEvenWithSameSuit() {
+        List<Card> hand = List.of(
+                new Card(CardSuit.HEARTS, CardRank.TWO),
+                new Card(CardSuit.HEARTS, CardRank.THREE),
+                new Card(CardSuit.HEARTS, CardRank.FOUR),
+                new Card(CardSuit.HEARTS, CardRank.SIX),
+                new Card(CardSuit.HEARTS, CardRank.SEVEN)
+        );
+
+        String result = new StraightFlushRankChecker().evaluateHand(hand, variant);
+
+        assertEquals(HandRank.UNKNOWN_HAND.name(), result);
+    }
+
+    @Test
     void flushCheckerReturnsEnumCompatibleHandRankName() {
         List<Card> hand = List.of(
                 new Card(CardSuit.SPADES, CardRank.TWO),
@@ -59,5 +81,12 @@ class RankCheckerRegressionTests {
         String result = new FlushRankChecker().evaluateHand(hand, variant);
 
         assertEquals(HandRank.FLUSH.name(), result);
+    }
+
+    @Test
+    void flushCheckerReturnsUnknownWhenHandIsNull() {
+        String result = new FlushRankChecker().evaluateHand(null, variant);
+
+        assertEquals(HandRank.UNKNOWN_HAND.name(), result);
     }
 }
