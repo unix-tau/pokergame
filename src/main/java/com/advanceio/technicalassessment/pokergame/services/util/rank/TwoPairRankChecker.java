@@ -12,16 +12,17 @@ import java.util.stream.Collectors;
 public class TwoPairRankChecker implements RankChecker {
     @Override
     public String evaluateHand(List<Card> hand, PokerVariant pokerVariant) {
-        // Implement logic for checking Two Pair
-        if (hand.size() != pokerVariant.getHandSize()) {
+        if (hand == null || pokerVariant == null || hand.size() != pokerVariant.getHandSize()) {
             return HandRank.UNKNOWN_HAND.toString();
         }
 
-        // Group cards by rank
+        if (hand.stream().anyMatch(card -> card == null || card.getValue() == null)) {
+            return HandRank.UNKNOWN_HAND.toString();
+        }
+
         Map<CardRank, Long> rankCounts = hand.stream()
                 .collect(Collectors.groupingBy(Card::getValue, Collectors.counting()));
 
-        // Check if there are two distinct ranks with a count of 2
         long pairCount = rankCounts.values().stream().filter(count -> count == 2).count();
 
         if (pairCount == 2) {
@@ -31,4 +32,3 @@ public class TwoPairRankChecker implements RankChecker {
         return HandRank.UNKNOWN_HAND.name();
     }
 }
-

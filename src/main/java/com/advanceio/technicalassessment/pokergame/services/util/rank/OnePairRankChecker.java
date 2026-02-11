@@ -12,25 +12,24 @@ import java.util.stream.Collectors;
 public class OnePairRankChecker implements RankChecker {
     @Override
     public String evaluateHand(List<Card> hand, PokerVariant pokerVariant) {
-        if (hand == null || hand.size() != pokerVariant.getHandSize()) {
+        if (hand == null || pokerVariant == null || hand.size() != pokerVariant.getHandSize()) {
             return HandRank.UNKNOWN_HAND.toString();
         }
 
-        // Group cards by rank
-        Map<CardRank, List<Card>> groupedByRank = hand.stream()
-                .collect(Collectors.groupingBy(Card::getValue));
-
-        // Filter for pairs
-        List<CardRank> pairs = groupedByRank.entrySet().stream()
-                .filter(entry -> entry.getValue().size() == 2)
-                .map(Map.Entry::getKey)
-                .collect(Collectors.toList());
-
-        if (pairs.size() == 1) {
-            return HandRank.ONE_PAIR.toString();
-
-        } else {
+        if (hand.stream().anyMatch(card -> card == null || card.getValue() == null)) {
             return HandRank.UNKNOWN_HAND.toString();
         }
+
+        Map<CardRank, Long> rankCounts = hand.stream()
+                .collect(Collectors.groupingBy(Card::getValue, Collectors.counting()));
+
+        long pairs = rankCounts.values().stream().filter(count -> count == 2).count();
+        boolean hasTripsOrQuads = rankCounts.values().stream().anyMatch(count -> count >= 3);
+
+        if (pairs == 1 && !hasTripsOrQuads) {
+            return HandRank.ONE_PAIR.name();
+        }
+
+        return HandRank.UNKNOWN_HAND.toString();
     }
 }

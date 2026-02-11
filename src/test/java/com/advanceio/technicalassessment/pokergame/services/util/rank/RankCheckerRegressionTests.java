@@ -89,4 +89,48 @@ class RankCheckerRegressionTests {
 
         assertEquals(HandRank.UNKNOWN_HAND.name(), result);
     }
+
+    @Test
+    void threeOfAKindReturnsEnumCompatibleHandRankName() {
+        List<Card> hand = List.of(
+                new Card(CardSuit.SPADES, CardRank.THREE),
+                new Card(CardSuit.CLUBS, CardRank.THREE),
+                new Card(CardSuit.DIAMONDS, CardRank.THREE),
+                new Card(CardSuit.HEARTS, CardRank.NINE),
+                new Card(CardSuit.SPADES, CardRank.KING)
+        );
+
+        String result = new ThreeOfAKindRankChecker().evaluateHand(hand, variant);
+
+        assertEquals(HandRank.THREE_OF_A_KIND.name(), result);
+    }
+
+    @Test
+    void fourOfAKindUsesVariantHandSizeAndReturnsUnknownOnSizeMismatch() {
+        List<Card> hand = List.of(
+                new Card(CardSuit.SPADES, CardRank.THREE),
+                new Card(CardSuit.CLUBS, CardRank.THREE),
+                new Card(CardSuit.DIAMONDS, CardRank.THREE),
+                new Card(CardSuit.HEARTS, CardRank.THREE)
+        );
+
+        String result = new FourOfAKindRankChecker().evaluateHand(hand, variant);
+
+        assertEquals(HandRank.UNKNOWN_HAND.name(), result);
+    }
+
+    @Test
+    void onePairDoesNotMisclassifyThreeOfAKind() {
+        List<Card> hand = List.of(
+                new Card(CardSuit.SPADES, CardRank.THREE),
+                new Card(CardSuit.CLUBS, CardRank.THREE),
+                new Card(CardSuit.DIAMONDS, CardRank.THREE),
+                new Card(CardSuit.HEARTS, CardRank.NINE),
+                new Card(CardSuit.SPADES, CardRank.KING)
+        );
+
+        String result = new OnePairRankChecker().evaluateHand(hand, variant);
+
+        assertEquals(HandRank.UNKNOWN_HAND.name(), result);
+    }
 }
