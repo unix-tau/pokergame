@@ -12,23 +12,24 @@ import java.util.stream.Collectors;
 public class ThreeOfAKindRankChecker implements RankChecker {
     @Override
     public String evaluateHand(List<Card> hand, PokerVariant pokerVariant) {
-        // Implement logic for checking Three of a Kind
-        if (hand.size() != pokerVariant.getHandSize()) {
+        if (hand == null || pokerVariant == null || hand.size() != pokerVariant.getHandSize()) {
             return HandRank.UNKNOWN_HAND.toString();
         }
 
-        // Group cards by rank
+        if (hand.stream().anyMatch(card -> card == null || card.getValue() == null)) {
+            return HandRank.UNKNOWN_HAND.toString();
+        }
+
         Map<CardRank, Long> rankCounts = hand.stream()
                 .collect(Collectors.groupingBy(Card::getValue, Collectors.counting()));
 
-        // Check if there is one rank with a count of 3
         boolean hasThreeOfAKind = rankCounts.values().stream().anyMatch(count -> count == 3);
+        boolean hasPair = rankCounts.values().stream().anyMatch(count -> count == 2);
 
-        if (hasThreeOfAKind) {
-            return "Three of a Kind";
+        if (hasThreeOfAKind && !hasPair) {
+            return HandRank.THREE_OF_A_KIND.name();
         }
 
         return HandRank.UNKNOWN_HAND.toString();
     }
-
 }

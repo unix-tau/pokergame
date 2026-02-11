@@ -10,17 +10,19 @@ import java.util.List;
 public class FlushRankChecker implements RankChecker {
     @Override
     public String evaluateHand(List<Card> hand, PokerVariant pokerVariant) {
-        // Implement logic for checking Flush
-        if (hand.size() != pokerVariant.getHandSize()) {
+        if (hand == null || pokerVariant == null || hand.size() != pokerVariant.getHandSize()) {
             return HandRank.UNKNOWN_HAND.toString();
         }
 
-        // Check if all cards have the same suit
+        if (hand.stream().anyMatch(card -> card == null || card.getSuit() == null)) {
+            return HandRank.UNKNOWN_HAND.toString();
+        }
+
         CardSuit firstSuit = hand.get(0).getSuit();
         boolean isFlush = hand.stream().allMatch(card -> card.getSuit().equals(firstSuit));
 
         if (isFlush) {
-            return "Flush";
+            return HandRank.FLUSH.name();
         }
 
         return HandRank.UNKNOWN_HAND.toString();
